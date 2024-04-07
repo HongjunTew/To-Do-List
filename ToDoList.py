@@ -1,5 +1,6 @@
 import wx
 import json
+import os
 
 # Function to add a task to the to-do list
 def add_task(event):
@@ -41,10 +42,25 @@ def remove_task(event):
 	else:
 		wx.MessageBox("No task selected.", "Error", wx.OK | wx.ICON_ERROR)
 
+# Function to remove all.
+def remove_all_tasks(event):
+	if len( todo_list) <1:
+		wx.MessageBox("No task to remove.", "Error", wx.OK | wx.ICON_ERROR)
+	else:
+		totallen=len(todo_list)
+		todo_list.clear()
+		update_list()
+		save_tasks()
+		wx.MessageBox(f"{totallen} task{"s" if totallen >1 else ""} removed successfully!", "Success", wx.OK | wx.ICON_INFORMATION)
+
 # Function to save tasks to JSON file
 def save_tasks():
-	with open("tasks.json", "w") as file:
-		json.dump(todo_list, file)
+	if len(todo_list)<1:
+		os.remove("tasks.json")
+	else:
+
+		with open("tasks.json", "w") as file:
+			json.dump(todo_list, file)
 
 # Function to load tasks from JSON file
 def load_tasks():
@@ -73,6 +89,9 @@ complete_button.Bind(wx.EVT_BUTTON, complete_task)
 
 remove_button = wx.Button(panel, label="Remove Task")
 remove_button.Bind(wx.EVT_BUTTON, remove_task)
+
+remove_all_button = wx.Button(panel, label="Remove all Tasks")
+remove_all_button.Bind(wx.EVT_BUTTON, remove_all_tasks)
 
 list_title = wx.StaticText(panel, label="Tasks")
 task_list = wx.ListBox(panel, style=wx.LB_SINGLE | wx.LB_ALWAYS_SB)
