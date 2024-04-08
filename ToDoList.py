@@ -1,6 +1,7 @@
 import wx
 import json
 import os
+import sys
 
 # Function to add a task to the to-do list
 def add_task(event):
@@ -83,33 +84,26 @@ frame = wx.Frame(None, title="To-Do List Manager", size=(400, 400))
 
 panel = wx.Panel(frame)
 
-task_label = wx.StaticText(panel, label="Enter Task:")
+task_label = wx.StaticText(panel, label="Enter &Task:")
 task_entry = wx.TextCtrl(panel, style=wx.TE_MULTILINE)
 
-add_button = wx.Button(panel, label="Add Task")
+add_button = wx.Button(panel, label="&Add Task")
 add_button.Bind(wx.EVT_BUTTON, add_task)
 
-complete_button = wx.Button(panel, label="Mark Task as Completed")
+complete_button = wx.Button(panel, label="Mark Task as &Completed")
 complete_button.Bind(wx.EVT_BUTTON, complete_task)
 
-remove_button = wx.Button(panel, label="Remove Task")
+remove_button = wx.Button(panel, label="Remove T&ask")
 remove_button.Bind(wx.EVT_BUTTON, remove_task)
 
-remove_all_button = wx.Button(panel, label="Remove all Tasks")
+remove_all_button = wx.Button(panel, label="&Remove all Tasks")
 remove_all_button.Bind(wx.EVT_BUTTON, remove_all_tasks)
 
-list_title = wx.StaticText(panel, label="Tasks")
+list_title = wx.StaticText(panel, label="&List of Tasks")
 task_list = wx.ListBox(panel, style=wx.LB_SINGLE | wx.LB_ALWAYS_SB)
 
-#Set shortcuts.
-accelerator_entries = [
-(wx.ACCEL_ALT, ord("A"), add_button.GetId()),
-(wx.ACCEL_ALT, ord("F"), complete_button.GetId()),
-(wx.ACCEL_ALT, ord("D"), remove_button.GetId()),
-(wx.ACCEL_ALT, ord("R"), remove_all_button.GetId())
-]
-accelerator_table = wx.AcceleratorTable(accelerator_entries)
-frame.SetAcceleratorTable(accelerator_table)
+quitbutton=wx.Button(panel, label="&Exit")
+quitbutton.Bind(wx.EVT_BUTTON, sys.exit)
 
 # Load tasks initially
 update_list()
@@ -123,6 +117,7 @@ sizer.Add(remove_button, 0, wx.ALL, 5)
 sizer.Add(remove_all_button, 0, wx.ALL, 5)
 sizer.Add(list_title, 0, wx.LEFT | wx.TOP, 5)
 sizer.Add(task_list, 1, wx.EXPAND | wx.ALL, 5)
+sizer.Add(quitbutton, 0, wx.ALL, 5)
 
 panel.SetSizer(sizer)
 
