@@ -13,6 +13,7 @@ def add_task(event):
 		wx.MessageBox("Task added successfully!", "Success", wx.OK | wx.ICON_INFORMATION)
 	else:
 		wx.MessageBox("Please enter a task.", "Error", wx.OK | wx.ICON_ERROR)
+	task_entry.SetFocus()
 
 # Function to mark a task as completed
 def complete_task(event):
@@ -22,8 +23,10 @@ def complete_task(event):
 		update_list()
 		save_tasks()
 		wx.MessageBox("Task marked as completed!", "Success", wx.OK | wx.ICON_INFORMATION)
+		task_list.SetFocus()
 	else:
 		wx.MessageBox("No task selected.", "Error", wx.OK | wx.ICON_ERROR)
+		task_list.SetFocus()
 
 # Function to view the to-do list
 def update_list():
@@ -41,6 +44,7 @@ def remove_task(event):
 		wx.MessageBox(f"Task '{removed_task}' removed successfully!", "Success", wx.OK | wx.ICON_INFORMATION)
 	else:
 		wx.MessageBox("No task selected.", "Error", wx.OK | wx.ICON_ERROR)
+	task_list.SetFocus()
 
 # Function to remove all.
 def remove_all_tasks(event):
@@ -52,6 +56,7 @@ def remove_all_tasks(event):
 		update_list()
 		save_tasks()
 		wx.MessageBox(f"{totallen} task{"s" if totallen >1 else ""} removed successfully!", "Success", wx.OK | wx.ICON_INFORMATION)
+	task_list.SetFocus()
 
 # Function to save tasks to JSON file
 def save_tasks():
