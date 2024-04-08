@@ -96,6 +96,16 @@ remove_all_button.Bind(wx.EVT_BUTTON, remove_all_tasks)
 list_title = wx.StaticText(panel, label="Tasks")
 task_list = wx.ListBox(panel, style=wx.LB_SINGLE | wx.LB_ALWAYS_SB)
 
+#Set shortcuts.
+accelerator_entries = [
+(wx.ACCEL_ALT, ord("A"), add_button.GetId()),
+(wx.ACCEL_ALT, ord("F"), complete_button.GetId()),
+(wx.ACCEL_ALT, ord("D"), remove_button.GetId()),
+(wx.ACCEL_ALT, ord("R"), remove_all_button.GetId())
+]
+accelerator_table = wx.AcceleratorTable(accelerator_entries)
+frame.SetAcceleratorTable(accelerator_table)
+
 # Load tasks initially
 update_list()
 
@@ -105,10 +115,11 @@ sizer.Add(task_entry, 0, wx.EXPAND | wx.ALL, 5)
 sizer.Add(add_button, 0, wx.ALL, 5)
 sizer.Add(complete_button, 0, wx.ALL, 5)
 sizer.Add(remove_button, 0, wx.ALL, 5)
+sizer.Add(remove_all_button, 0, wx.ALL, 5)
 sizer.Add(list_title, 0, wx.LEFT | wx.TOP, 5)
 sizer.Add(task_list, 1, wx.EXPAND | wx.ALL, 5)
 
 panel.SetSizer(sizer)
 
-frame.Show()
+frame.Show(True)
 app.MainLoop()
