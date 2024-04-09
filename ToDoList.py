@@ -1,5 +1,7 @@
 import wx
 import json
+import os
+import sys
 
 # Function to add a task to the to-do list
 def add_task(event):
@@ -12,6 +14,7 @@ def add_task(event):
 		wx.MessageBox("Task added successfully!", "Success", wx.OK | wx.ICON_INFORMATION)
 	else:
 		wx.MessageBox("Please enter a task.", "Error", wx.OK | wx.ICON_ERROR)
+	task_entry.SetFocus()
 
 # Function to mark a task as completed
 def complete_task(event):
@@ -21,8 +24,10 @@ def complete_task(event):
 		update_list()
 		save_tasks()
 		wx.MessageBox("Task marked as completed!", "Success", wx.OK | wx.ICON_INFORMATION)
+		task_list.SetFocus()
 	else:
 		wx.MessageBox("No task selected.", "Error", wx.OK | wx.ICON_ERROR)
+		task_list.SetFocus()
 
 # Function to view the to-do list
 def update_list():
@@ -40,11 +45,28 @@ def remove_task(event):
 		wx.MessageBox(f"Task '{removed_task}' removed successfully!", "Success", wx.OK | wx.ICON_INFORMATION)
 	else:
 		wx.MessageBox("No task selected.", "Error", wx.OK | wx.ICON_ERROR)
+	task_list.SetFocus()
+
+# Function to remove all.
+def remove_all_tasks(event):
+	if len( todo_list) <1:
+		wx.MessageBox("No task to remove.", "Error", wx.OK | wx.ICON_ERROR)
+	else:
+		totallen=len(todo_list)
+		todo_list.clear()
+		update_list()
+		save_tasks()
+		wx.MessageBox(f"{totallen} task{"s" if totallen >1 else ""} removed successfully!", "Success", wx.OK | wx.ICON_INFORMATION)
+	task_list.SetFocus()
 
 # Function to save tasks to JSON file
 def save_tasks():
-	with open("tasks.json", "w") as file:
-		json.dump(todo_list, file)
+	if len(todo_list)<1:
+		os.remove("tasks.json")
+	else:
+
+		with open("tasks.json", "w") as file:
+			json.dump(todo_list, file)
 
 # Function to load tasks from JSON file
 def load_tasks():
@@ -62,20 +84,26 @@ frame = wx.Frame(None, title="To-Do List Manager", size=(400, 400))
 
 panel = wx.Panel(frame)
 
-task_label = wx.StaticText(panel, label="Enter Task:")
+task_label = wx.StaticText(panel, label="Enter &Task:")
 task_entry = wx.TextCtrl(panel, style=wx.TE_MULTILINE)
 
-add_button = wx.Button(panel, label="Add Task")
+add_button = wx.Button(panel, label="&Add Task")
 add_button.Bind(wx.EVT_BUTTON, add_task)
 
-complete_button = wx.Button(panel, label="Mark Task as Completed")
+complete_button = wx.Button(panel, label="Mark Task as &Completed")
 complete_button.Bind(wx.EVT_BUTTON, complete_task)
 
-remove_button = wx.Button(panel, label="Remove Task")
+remove_button = wx.Button(panel, label="Remove T&ask")
 remove_button.Bind(wx.EVT_BUTTON, remove_task)
 
-list_title = wx.StaticText(panel, label="Tasks")
+remove_all_button = wx.Button(panel, label="&Remove all Tasks")
+remove_all_button.Bind(wx.EVT_BUTTON, remove_all_tasks)
+
+list_title = wx.StaticText(panel, label="&List of Tasks")
 task_list = wx.ListBox(panel, style=wx.LB_SINGLE | wx.LB_ALWAYS_SB)
+
+quitbutton=wx.Button(panel, label="&Exit")
+quitbutton.Bind(wx.EVT_BUTTON, sys.exit)
 
 # Load tasks initially
 update_list()
@@ -86,10 +114,12 @@ sizer.Add(task_entry, 0, wx.EXPAND | wx.ALL, 5)
 sizer.Add(add_button, 0, wx.ALL, 5)
 sizer.Add(complete_button, 0, wx.ALL, 5)
 sizer.Add(remove_button, 0, wx.ALL, 5)
+sizer.Add(remove_all_button, 0, wx.ALL, 5)
 sizer.Add(list_title, 0, wx.LEFT | wx.TOP, 5)
 sizer.Add(task_list, 1, wx.EXPAND | wx.ALL, 5)
+sizer.Add(quitbutton, 0, wx.ALL, 5)
 
 panel.SetSizer(sizer)
 
-frame.Show()
+frame.Show(True)
 app.MainLoop()

@@ -4,7 +4,7 @@ A simple tool that allows you to save your to-do list. For example, you can save
 
 ### Features
 
-* simple with GUI dialogs.
+* Simple with GUI dialogs.
 * Automatically saves your to-do list.
 
 ### Feedback
