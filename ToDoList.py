@@ -1,84 +1,86 @@
+# Import necessary modules
 import wx
 import json
 import os
 import sys
 
+# Define global variables
+todo_list = []
+
 # Function to add a task to the to-do list
 def add_task(event):
-	task = task_entry.GetValue()
-	if task.strip():
-		todo_list.append(task)
-		task_entry.Clear()
-		update_list()
-		save_tasks()
-		wx.MessageBox("Task added successfully!", "Success", wx.OK | wx.ICON_INFORMATION)
-	else:
-		wx.MessageBox("Please enter a task.", "Error", wx.OK | wx.ICON_ERROR)
-	task_entry.SetFocus()
+    task = task_entry.GetValue()
+    if task.strip():
+        todo_list.append({"task": task, "completed": False})
+        task_entry.Clear()
+        update_list()
+        save_tasks()
+        wx.MessageBox("Task added successfully!", "Success", wx.OK | wx.ICON_INFORMATION)
+    else:
+        wx.MessageBox("Please enter a task.", "Error", wx.OK | wx.ICON_ERROR)
+    task_entry.SetFocus()
 
 # Function to mark a task as completed
 def complete_task(event):
-	task_index = task_list.GetSelection()
-	if task_index != -1:
-		todo_list[task_index] += " - Completed"
-		update_list()
-		save_tasks()
-		wx.MessageBox("Task marked as completed!", "Success", wx.OK | wx.ICON_INFORMATION)
-		task_list.SetFocus()
-	else:
-		wx.MessageBox("No task selected.", "Error", wx.OK | wx.ICON_ERROR)
-		task_list.SetFocus()
+    task_index = task_list.GetSelection()
+    if task_index != -1:
+        todo_list[task_index]["completed"] = True
+        update_list()
+        save_tasks()
+        wx.MessageBox("Task marked as completed!", "Success", wx.OK | wx.ICON_INFORMATION)
+        task_list.SetFocus()
+    else:
+        wx.MessageBox("No task selected.", "Error", wx.OK | wx.ICON_ERROR)
+        task_list.SetFocus()
 
 # Function to view the to-do list
 def update_list():
-	task_list.Clear()
-	for task in todo_list:
-		task_list.Append(task)
+    task_list.Clear()
+    for task in todo_list:
+        task_text = f"{task['task']} (Completed)" if task['completed'] else task['task']
+        task_list.Append(task_text)
 
 # Function to remove a task from the to-do list
 def remove_task(event):
-	task_index = task_list.GetSelection()
-	if task_index != -1:
-		removed_task = todo_list.pop(task_index)
-		update_list()
-		save_tasks()
-		wx.MessageBox(f"Task '{removed_task}' removed successfully!", "Success", wx.OK | wx.ICON_INFORMATION)
-	else:
-		wx.MessageBox("No task selected.", "Error", wx.OK | wx.ICON_ERROR)
-	task_list.SetFocus()
+    task_index = task_list.GetSelection()
+    if task_index != -1:
+        removed_task = todo_list.pop(task_index)
+        update_list()
+        save_tasks()
+        wx.MessageBox(f"Task '{removed_task['task']}' removed successfully!", "Success", wx.OK | wx.ICON_INFORMATION)
+    else:
+        wx.MessageBox("No task selected.", "Error", wx.OK | wx.ICON_ERROR)
+    task_list.SetFocus()
 
-# Function to remove all.
+# Function to remove all tasks
 def remove_all_tasks(event):
-	if len( todo_list) <1:
-		wx.MessageBox("No task to remove.", "Error", wx.OK | wx.ICON_ERROR)
-	else:
-		totallen=len(todo_list)
-		todo_list.clear()
-		update_list()
-		save_tasks()
-		wx.MessageBox(f"{totallen} task{"s" if totallen >1 else ""} removed successfully!", "Success", wx.OK | wx.ICON_INFORMATION)
-	task_list.SetFocus()
+    if len(todo_list) < 1:
+        wx.MessageBox("No task to remove.", "Error", wx.OK | wx.ICON_ERROR)
+    else:
+        dlg = wx.MessageDialog(None, "Are you sure you want to remove all tasks?", "Confirm", wx.YES_NO | wx.ICON_QUESTION)
+        result = dlg.ShowModal()
+        dlg.Destroy()
+        if result == wx.ID_YES:
+            todo_list.clear()
+            update_list()
+            save_tasks()
+            wx.MessageBox("All tasks removed successfully!", "Success", wx.OK | wx.ICON_INFORMATION)
+    task_list.SetFocus()
 
 # Function to save tasks to JSON file
 def save_tasks():
-	if len(todo_list)<1:
-		os.remove("tasks.json")
-	else:
-
-		with open("tasks.json", "w") as file:
-			json.dump(todo_list, file)
+    with open("tasks.json", "w") as file:
+        json.dump(todo_list, file)
 
 # Function to load tasks from JSON file
 def load_tasks():
-	try:
-		with open("tasks.json", "r") as file:
-			return json.load(file)
-	except FileNotFoundError:
-		return []
+    try:
+        with open("tasks.json", "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return []
 
 # Main program
-todo_list = load_tasks()
-
 app = wx.App()
 frame = wx.Frame(None, title="To-Do List Manager", size=(400, 400))
 
@@ -102,10 +104,8 @@ remove_all_button.Bind(wx.EVT_BUTTON, remove_all_tasks)
 list_title = wx.StaticText(panel, label="&List of Tasks")
 task_list = wx.ListBox(panel, style=wx.LB_SINGLE | wx.LB_ALWAYS_SB)
 
-quitbutton=wx.Button(panel, label="&Exit")
-quitbutton.Bind(wx.EVT_BUTTON, sys.exit)
-
 # Load tasks initially
+todo_list = load_tasks()
 update_list()
 
 sizer = wx.BoxSizer(wx.VERTICAL)
@@ -117,7 +117,6 @@ sizer.Add(remove_button, 0, wx.ALL, 5)
 sizer.Add(remove_all_button, 0, wx.ALL, 5)
 sizer.Add(list_title, 0, wx.LEFT | wx.TOP, 5)
 sizer.Add(task_list, 1, wx.EXPAND | wx.ALL, 5)
-sizer.Add(quitbutton, 0, wx.ALL, 5)
 
 panel.SetSizer(sizer)
 
