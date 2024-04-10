@@ -14,3 +14,17 @@ Any feedback is appreciated. If you have suggestions, you can open an issue on t
 ### Pull Requests
 
 Any pull requests are appreciated. I'll review and accept them when I have time.
+
+## Building
+
+You need the following requirements in order to build.
+
+* You should have python installed to the latest version as possible.
+* You should have installed `wxpython` module.
+
+You can also install all of the requirements by
+```
+pip install -r requirements.txt
+```
+
+To compile the script into executable, run the `compile.bat`
