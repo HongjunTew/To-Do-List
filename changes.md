@@ -1,22 +1,23 @@
-## Wednesday 10 April 2024
-1.
-Added error handling in `save_tasks()` function to handle cases where the list is empty or the file doesn't exist.
-2.
-Changed `totallen` to `total_len` for consistency.
-3.
-Corrected the naming convention for the `quit_button` variable.
-4. dded missing indentation in the `remove_task` function after `else` block.
-## Tuesday 09 April 2024
-Added exit button. Shortcut keys are not spoken as using the & keyword
-Added a new feature called remove all, which removes all tasks.
-Now, If the tasks list has less than 1 elements, the save function will delete the `tasks.json` file.
+# To-Do-List tool, changes
 
-### Monday, 08 April 2024,
-added focuses in failures and successes
-### Thirsday 04 April 2024
-Changed to GUI tool using wx.
+## Wednesday, April 10, 2024
+* Added the check to completion of tasks. From now on, trying to mark as completed upon the task that is already marked as completed will end up failure, displaying error message.
+* Added `compile.bat` file into the directory, allowing to compile into executable to be distributed.
+* Added error handling in `save_tasks()` function to handle cases where the list is empty or the file doesn't exist.
+* Changed `totallen` to `total_len` for consistency.
+* Corrected the naming convention for the `quit_button` variable.
+* Added missing indentation in the `remove_task` function after `else` block.
 
-updated Readme.
+## Tuesday, April 09, 2024
+* Added exit button. Shortcut keys are now spoken as using the & keyword.
+* Added a new feature called remove all, which removes all tasks.
+* Now, If the tasks list has less than 1 elements, the save function will delete the `tasks.json` file.
 
-Added the ability to save, in JSON format.
-First release
+## Monday, April 08, 2024,
+* added focuses in failures and successes
+
+## Thirsday April 04, 2024
+* Changed to GUI tool using wx.
+* updated Readme.
+* Added the ability to save, in JSON format.
+* First release
