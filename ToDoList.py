@@ -86,11 +86,11 @@ def load_tasks():
 
 # Main program
 app = wx.App()
-frame = wx.Frame(None, title="To-Do List Manager", size=(400, 400))
+frame = wx.Frame(None, title="To-Do List Manager", size=(600, 400))
 
 panel = wx.Panel(frame)
 
-task_label = wx.StaticText(panel, label="Enter &Task:")
+task_label = wx.StaticText(panel, label="&Enter Task:")
 task_entry = wx.TextCtrl(panel, style=wx.TE_MULTILINE)
 
 add_button = wx.Button(panel, label="&Add Task")
@@ -99,13 +99,13 @@ add_button.Bind(wx.EVT_BUTTON, add_task)
 complete_button = wx.Button(panel, label="Mark Task as &Completed")
 complete_button.Bind(wx.EVT_BUTTON, complete_task)
 
-remove_button = wx.Button(panel, label="Remove T&ask")
+remove_button = wx.Button(panel, label="&Remove Task")
 remove_button.Bind(wx.EVT_BUTTON, remove_task)
 
-remove_all_button = wx.Button(panel, label="&Remove all Tasks")
+remove_all_button = wx.Button(panel, label="&Delete all Tasks")
 remove_all_button.Bind(wx.EVT_BUTTON, remove_all_tasks)
 
-exit_button=wx.Button(panel,label="&exit")
+exit_button=wx.Button(panel,label="e&xit")
 exit_button.Bind(wx.EVT_BUTTON, sys.exit)
 
 list_title = wx.StaticText(panel, label="&List of Tasks")
